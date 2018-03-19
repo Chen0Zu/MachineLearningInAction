@@ -1,6 +1,7 @@
 from numpy import *
 import operator
 from os import listdir
+import time
 
 def createDataSet():
 	group = array([[1.0, 1.1],[1.0,1.0],[0,0],[0,0.1]])
@@ -72,6 +73,7 @@ def img2vector(filename):
 	return returnVect
 
 def handwritingClassTest():
+	start = time.clock()
 	hwLabels = []
 	trainingFileList = listdir('trainingDigits')
 	m = len(trainingFileList)
@@ -96,4 +98,19 @@ def handwritingClassTest():
 		if (classifierResult != classNumStr): errorCount += 1.0
 	print "\nthe total number of errors is:%d" % errorCount
 	print "\nthe total error rate is: %f" % (errorCount/float(mTest))
+	print "\nTime used: %f" % (time.clock()-start)
+
+class node:
+	def __init__(self):
+		self.data = []
+		self.right = None
+		self.left = None
+		self.split = []
+		self.median = []
+
+def buildKDTree(dataMat):
+	root = node()
+	
+	variance = dataMat.var(axis=0)
+	
 
