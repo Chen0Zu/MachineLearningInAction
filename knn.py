@@ -2,6 +2,7 @@ from numpy import *
 import operator
 from os import listdir
 import time
+import pdb
 
 def createDataSet():
 	group = array([[1.0, 1.1],[1.0,1.0],[0,0],[0,0.1]])
@@ -103,14 +104,42 @@ def handwritingClassTest():
 class node:
 	def __init__(self):
 		self.data = []
+		self.parent = None
 		self.right = None
 		self.left = None
 		self.split = []
 		self.median = []
 
 def buildKDTree(dataMat):
+
+	if len(dataMat) < 1:
+		return
+
 	root = node()
 	
 	variance = dataMat.var(axis=0)
-	
+	root.split = variance.argsort()[-1]
+	#pdb.set_trace()
+	dump = dataMat[:,root.split].argsort()
+	n = len(dataMat)
+	#medianIdx = dump[int((n-1)/2)]
+	medianIdx = dump[int(n/2)]
+	root.data = dataMat[medianIdx,:]
+	root.median = dataMat[medianIdx,root.split]
+
+	leftIdx = dataMat[:,root.split] < root.median
+	leftData = dataMat[leftIdx,:]
+	root.left = buildKDTree(leftData)
+	if root.left is not None:
+		root.left.parent = root
+
+	rightIdx = dataMat[:,root.split] > root.median
+	rightData = dataMat[rightIdx,:]
+	root.right = buildKDTree(rightData)
+	if root.right is not None:
+		root.right.parent = root
+
+	return root
+
+
 
