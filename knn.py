@@ -109,11 +109,12 @@ class node:
 		self.left = None
 		self.split = []
 		self.median = []
+		self.leaf = True
 
 def buildKDTree(dataMat):
 
 	if len(dataMat) < 1:
-		return
+		return 
 
 	root = node()
 	
@@ -131,15 +132,49 @@ def buildKDTree(dataMat):
 	leftData = dataMat[leftIdx,:]
 	root.left = buildKDTree(leftData)
 	if root.left is not None:
+		root.leaf = False
 		root.left.parent = root
 
 	rightIdx = dataMat[:,root.split] > root.median
 	rightData = dataMat[rightIdx,:]
 	root.right = buildKDTree(rightData)
 	if root.right is not None:
+		root.leaf = False
 		root.right.parent = root
 
 	return root
+
+def searchKDTree(x, root, nearestNode = None, nearestDist = float('inf')):
+	currNode = root
+	visitedList = []
+	visitedList.append(currNode)
+
+	while currNode.leaf == False:
+		#pdb.set_trace()
+		if currNode.median > x[currNode.split]:
+			currNode = currNode.left
+			#visitedList.append(currNode)
+		else:
+			currNode = currNode.right
+		visitedList.append(currNode)
+
+	while len(visitedList) != 0:
+		pdb.set_trace()
+		currNode = visitedList.pop()
+		dist = sqrt(sum((currNode.data - x)**2))
+		if dist < nearestDist:
+			nearestNode = currNode
+			nearestDist = dist
+
+		if len(visitedList) != 0:
+			if abs(x[currNode.parent.split] - currNode.parent.median) < nearestDist:
+				if currNode == currNode.parent.left:
+					nearestNode,nearestDist = searchKDTree(x, currNode.parent.right, nearestNode, nearestDist)
+				else:
+					nearestNode,nearestDist = searchKDTree(x, currNode.parent.left, nearestNode, nearestDist)
+
+	return nearestNode, nearestDist
+
 
 
 
