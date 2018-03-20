@@ -79,3 +79,6 @@ def createTree(dataSet, labels):
 		myTree[bestFeatLabel][value] = createTree(splitDataSet(dataSet,bestFeat,value), subLabels)
 	return myTree
 
+def classify(inputTree, featLabels, testVec):
+	firstStr = inputTree.keys()[0]
+	
