@@ -23,6 +23,11 @@ def clipAlpha(aj,H,L):
 		aj = L
 	return aj
 
+def smoSimple(dataMat, classLabels, C, toler, maxIter):
+	dataMatrix = mat(dataMat)
+	labelMat = mat(classLabels).transpose()
+	
+
 
 dataArr, labelArr = loadDataSet('testSet.txt')
 print labelArr
