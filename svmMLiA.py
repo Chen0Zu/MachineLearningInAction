@@ -23,8 +23,8 @@ def clipAlpha(aj,H,L):
 		aj = L
 	return aj
 
-def smoSimple(dataMat, classLabels, C, toler, maxIter):
-	dataMatrix = mat(dataMat)
+def smoSimple(dataMatIn, classLabels, C, toler, maxIter):
+	dataMatrix = mat(dataMatIn)
 	labelMat = mat(classLabels).transpose()
 	b = 0
 	m,n = shape(dataMatrix)
@@ -77,9 +77,3 @@ def smoSimple(dataMat, classLabels, C, toler, maxIter):
 			else: iter = 0
 			print "iteration number: %d" % iter
 		return b,alphas
-
-
-
-dataArr, labelArr = loadDataSet('testSet.txt')
-print labelArr
-print shape(mat(labelArr).transpose())
